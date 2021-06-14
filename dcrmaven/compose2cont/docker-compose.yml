@@ -1,0 +1,16 @@
+version: '2'
+services:
+  bld:
+    build: ./cont1
+    volumes:
+      - comvol:/home/user/bxf/
+  prod:
+    build: ./cont2
+    links:
+      - bld
+    ports:
+      - 8080:8080
+    volumes:
+      - comvol:/usr/share/apache-tomcat-9.0.40/webapps/
+volumes:
+  comvol:
