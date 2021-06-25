@@ -1,0 +1,27 @@
+stages:
+  - build
+  - delete_exist
+  - run
+
+build:
+  stage: build
+  tags: 
+    - docker
+  script:
+    - echo "ALOHA!!!"
+    - docker build --tag wp .
+
+delete_exist:
+  stage: delete_exist
+  tags:
+    - docker
+  allow_failure: true
+  script:
+    - docker stop wordpr && docker rm wordpr
+
+run:
+  stage: run
+  tags:
+    - docker
+  script:
+    - docker run -d -p 8080:80 --name wordpr wp 
