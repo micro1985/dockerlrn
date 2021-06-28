@@ -1,5 +1,5 @@
-#FROM amazonlinux
-FROM centos:7
+FROM amazonlinux
+#FROM centos:7
 
 RUN echo "proxy=http://192.168.5.9:8080" >> /etc/yum.conf
 RUN yum -y update

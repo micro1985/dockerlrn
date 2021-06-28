@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-web-deployment-autoscale
+  labels:
+    app : my-k8s-application
+    env: prod
+    owner: xenn
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      project: myk8sautoscale
+  template:
+    metadata:
+      labels:
+        project: myk8sautoscale
+    spec:
+      containers:
+      - name: myk8s-repl-app
+        image: micro1985/myk8sap:version2
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v2beta1
+    kind: Deployment
+    name: my-web-deployment-autoscale
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 80
