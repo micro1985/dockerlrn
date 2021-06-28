@@ -1,0 +1,18 @@
+stages:
+  - delete_exist
+  - build_up
+  - run
+
+delete_exist:
+  stage: delete_exist
+  tags: 
+    - docker
+  script:
+    - docker-compose down
+
+build_up:
+  stage: build_up
+  tags: 
+    - docker
+  script:
+    - docker-compose up -d
