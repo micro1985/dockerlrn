@@ -31,7 +31,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v2beta1v1
     kind: Deployment
-    name: my-web-deployment-autoscaling
+    name: my-web-deploy-autoscaling
   minReplicas: 2
   maxReplicas: 5
   metrics:
