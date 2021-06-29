@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-web-deploy-multi-pod
+  labels:
+    app: my-k8s-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      project: cia        #Service will look for these PODs labels!!!
+  template:
+    metadata:
+      labels:
+        project: cia
+    spec:
+      containers:
+        - name: cia-web
+          image: micro1985/myk8sap:latest
+          ports:
+            - containerPort: 80   # port on POD
+        - name: not-cia-web
+          image: tomcat:8.5.38
+          ports:
+            - containerPort: 8080 # port on POD
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-multi-pod-service
+  labels:
+    env   : prod
+    owner : xenn
+spec:
+  type: LoadBalancer
+  selector:
+    project: cia         #selecting PODs with those labels - fbi
+  ports:
+    - name       : cia-app-listener
+      protocol   : TCP
+      port       : 80 # Port on LoadBalancer
+      targetPort : 80 #Port on POD
+    - name:      : not-cia-app-listener
+      protocol   : TCP
+      port       : 8888   # port on LoadBalancer
+      targetPort : 8080   # port on POD (tomcat)
